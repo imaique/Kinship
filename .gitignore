@@ -5,3 +5,4 @@ KinshipFE
 KinshipFront
 **.DS_Store
 .DS_Store
+__pycache__
