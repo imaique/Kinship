@@ -1,1 +1,7 @@
 env
+__pycache__
+fastapi
+KinshipFE
+KinshipFront
+**.DS_Store
+.DS_Store
