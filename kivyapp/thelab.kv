@@ -1,0 +1,189 @@
+MenuScreen:
+
+<MenuScreen>:
+    Button:
+        text: 'yeah'
+        on_press:
+            root.request()
+            root.manager.current = 'Eventlist'
+
+<Eventlist>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'My Events'
+            size_hint: 1, None
+            height: '50dp'
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, None
+            height: '50dp'
+            Label:
+                text: 'new event'
+                size_hint: None, 1
+                width: '150dp'
+            TextInput:
+                id: event
+            Button:
+                text: "+"
+                on_press:
+                    root.create(event.text)
+                    event.text = ''
+                size_hint: None, 1
+                width: '120dp'
+            Button:
+                text: 'Camera'
+                on_press:
+                    root.manager.current = 'Camscreen'
+                size_hint: None, 1
+                width: '120dp'
+                
+        StackLayout:
+            id: stack_id
+        
+            
+<Myinfos>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'My Infos'
+            size_hint: 1, None
+            height: '50dp'
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, None
+            height: '50dp'
+            TextInput:
+                id: link
+            Button:
+                text: "+"
+                on_press:
+                    root.create(link.text)
+                    link.text = ''
+        StackLayout:
+            id: stack_idi
+        BoxLayout:
+            pos_hint: {'center_x': .5, 'center_y': .1}
+            size_hint: .5, None
+            height: '50dp'
+            Button:
+                text: 'Back'
+                on_press:
+                    root.manager.current = 'Eventlist'
+            Button:
+                text: 'share'
+
+
+
+<Camscreen>:
+    on_enter:
+        camera.play = True
+    BoxLayout:
+        orientation: "vertical"
+        Camera:
+            id: camera
+            play: False
+            resolution: (640, 480)
+            pos_hint: {'center_x': .5, 'center_y': .2}
+            canvas.before:
+                PushMatrix
+                Rotate:
+                    angle: -90
+                    origin: self.center
+            canvas.after:
+                PopMatrix
+        Label:
+            text: 'test'
+            size_hint_y: None
+            height: '48dp'
+            font_size: "17dp"
+        Button:
+            text: 'Take Pic'
+            size_hint_x: .5
+            size_hint_y: None
+            height: '48dp'
+            pos_hint: {"center_x": .5}
+            on_press:
+                root.take_pic()
+        Button:
+            text: 'Home'
+            size_hint_x: .5
+            size_hint_y: None
+            height: '48dp'
+            pos_hint: {"center_x": .5}
+            on_press:
+                camera.play = False
+                root.manager.current = 'menu'
+
+
+
+
+<Maincamscreen>:
+    on_enter:
+        camera.play = True
+    FloatLayout:
+        orientation: "vertical"
+        id:anchor
+        Camera:
+            id: camera
+            play: False
+            resolution: (640, 480)
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            canvas.before:
+                PushMatrix
+                Rotate:
+                    angle: -90
+                    origin: self.center
+            canvas.after:
+                PopMatrix
+        Label:
+            text: 'test'
+            size_hint_y: None
+            height: '48dp'
+            font_size: "17dp"
+        Button:
+            text: 'Take Pic'
+            size_hint_x: .5
+            size_hint_y: None
+            height: '48dp'
+            pos_hint: {"center_x": .5}
+            on_press:
+                root.take_pic()
+        Button:
+            text: 'Back'
+            size_hint_x: .5
+            size_hint_y: None
+            height: '48dp'
+            pos_hint: {"center_x": .5,"center_y": .1}
+            on_press:
+                camera.play = False
+                root.manager.current = 'Eventlist'
+
+
+
+<DisplayInfos>:
+    BoxLayout:
+        Label:
+            text: root.name
+            size_hint: 1, None
+            height: '50dp'
+        StackLayout:
+            id: stack_idis
+
+        Button:
+            text: 'Back'
+            pos_hint: {'center_x': .5, 'center_y': .1}
+            size_hint: .5, None
+            height: '50dp'
+            on_press:
+                root.manager.current = 'Eventlist'
+        Button:
+            text: 'Home'
+            size_hint_x: .5
+            size_hint_y: None
+            height: '48dp'
+            pos_hint: {"center_x": .5}
+            on_press:
+                root.manager.current = 'menu'
+        
+
