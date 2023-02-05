@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import base64
 from recognition import FaceRecognition
+
+
 face_recogniser = FaceRecognition()
 app = FastAPI()
 
@@ -17,5 +19,4 @@ async def upload_info_endpoint(userinfo: UserInfo):
     # with open("imageToSave.png", "wb") as fh:
     #     fh.write(base64.decodebytes(img_data))
     face_recogniser.add_face(img_data)
-
     return userinfo
