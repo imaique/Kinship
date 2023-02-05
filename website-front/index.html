@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Display Webcam Stream</title>
+    <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
+ 
+    <style>
+        .row {
+            display: -webkit-flex;
+            display: flex;
+        }
+
+        .column {
+            background-color: #F1F1F1;
+            margin: 1%;
+            padding: 1%;
+        }
+
+        @media (max-width: 450px) {
+            .row {
+            -webkit-flex-direction: column;
+            flex-direction: column;
+            }
+        }
+
+        button, input {
+            max-height: 60em;
+            max-width: 240em;
+        }
+
+
+
+        body, button, #submit {
+            font-size: 30px;
+        }
+    </style>
+</head>
+ 
+<body>
+    <div class="column">
+        <button id="start-camera">Start Camera</button>
+        <a href="page2.html"> Inscription</a>
+        <video id="video" width="100%" height="100%" autoplay></video>
+        <canvas id="canvas" width="100%" height="100%"></canvas>
+    </div>
+    <div class="column">
+        <form id="formulaire">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" value="John"><br>
+            <label for="linkedin">LinkedIn:</label><br>
+            <input type="text" id="linkedin" name="linkedin" value="Doe"><br><br>
+            <input type="submit" id="submit" value="Submit">
+          </form>
+    </div>
+
+    <script>
+        let camera_button = document.querySelector("#start-camera");
+        let video = document.querySelector("#video");
+        let click_button = document.querySelector("#click-photo");
+        let canvas = document.querySelector("#canvas");
+        const baseurl ="https://kinship-api.herokuapp.com/";
+
+        // Get the form element
+        const form = document.getElementById("formulaire");
+        // Add 'submit' event handler
+        form.addEventListener("submit", (event) => {
+            var formData = new FormData(formulaire);
+
+            // iterate through entries...
+            var hellsList = []
+            for (var pair of formData.entries()) {
+                // console.log(pair[0] + ": " + pair[1]);
+                hellsList = hellsList.concat(pair[1])
+            }
+            // console.log(formData.entries())
+            // console.log(hellsList)
+            event.preventDefault();
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+   	        let image_data_url = canvas.toDataURL('image/jpeg');
+
+   	        // data url of the image
+   	        // console.log(image_data_url);
+            // console.log(baseurl + 'userinfo')
+            fetch(baseurl + 'userinfo', {
+                method: 'POST',
+                headers: {
+                    'Accept': '*/*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "Name": hellsList[0],
+                    // "Linkedin": formData.entries()[1][1],
+                    "Image": image_data_url
+                })
+            })
+            .then(response => response.json())
+            .then(response => console.log(JSON.stringify(response)))
+
+        });
+
+        camera_button.addEventListener('click', async function() {
+   	        let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+	        video.srcObject = stream;
+        });
+
+        // click_button.addEventListener('click', function() {
+   	    //     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+   	    //     let image_data_url = canvas.toDataURL('image/jpeg');
+
+   	    //     // data url of the image
+   	    //     console.log(image_data_url);
+        //     console.log(baseurl + 'userinfo')
+        //     fetch(baseurl + 'userinfo', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Accept': '*/*',
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({
+        //             "Name": "Michael",
+        //             "Image": image_data_url
+        //         })
+        //     })
+        //     .then(response => response.json())
+        //     .then(response => console.log(JSON.stringify(response)))
+
+        // });
+    </script>
+</body>
+</html>
