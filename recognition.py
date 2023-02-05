@@ -25,7 +25,6 @@ class FaceRecognition:
     known_face_names = []
     process_current_frame = True
 
-
     def __init__(self):
         self.encode_faces()
 
@@ -34,14 +33,9 @@ class FaceRecognition:
             face_image = face_recognition.load_image_file(f"faces/{image}")
             face_encoding = face_recognition.face_encodings(face_image)[0]
 
-            my_map = {'ali.jpg': 'https://www.linkedin.com/in/ali-taladar-a3b02a170/',
-                      'max.jpg': 'https://www.linkedin.com/in/maxence-bollon/',
-                      'michael.jpg': 'https://www.linkedin.com/in/michael-jr-osuji/',
-                      'louri.jpg': 'https://www.linkedin.com/in/louri-compain/'}
-
             self.known_face_encodings.append(face_encoding)
-            self.known_face_names.append(my_map[image])
-
+            self.known_face_names.append(image)
+        print(self.known_face_names)
 
     def run_recognition(self):
         video_capture = cv2.VideoCapture(0)
@@ -92,9 +86,9 @@ class FaceRecognition:
                 left *= 4
 
                 # Create the frame with the name
-                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 4)
+                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
                 cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-                cv2.putText(frame, name, (left + 6, bottom - 6), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1)
+                cv2.putText(frame, name, (left + 6, bottom - 6), cv2.FONT_HERSHEY_DUPLEX, 0.8, (255, 255, 255), 1)
 
             # Display the resulting image
             cv2.imshow('Face Recognition', frame)
