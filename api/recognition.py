@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import math
 from PIL import Image
-
+from utils import converter, saveImg
 
 def face_confidence(face_distance, face_match_threshold=0.6):
     range = (1.0 - face_match_threshold)
@@ -23,22 +23,33 @@ class FaceRecognition:
     face_names = []
     known_face_encodings = []
     known_face_names = []
-    process_current_frame = True
+    counter = 0
 
     def __init__(self):
         self.encode_faces()
 
+    def add_face(self, image_b64):
+        face_image = converter(image_b64)
+        image_id = self.counter
+        saveImg(face_image, image_id)
+        self.counter += 1
+        self.append_image(f'{image_id}.jpg')
+
+    def append_image(self, image):
+        face_image = face_recognition.load_image_file(f'faces/{image}')
+        face_encoding = face_recognition.face_encodings(face_image)[0]
+
+        self.known_face_encodings.append(face_encoding)
+        self.known_face_names.append(image)
+
     def encode_faces(self):
         for image in os.listdir('faces'):
-            face_image = face_recognition.load_image_file(f'faces/{image}')
-            face_encoding = face_recognition.face_encodings(face_image)[0]
-
-            self.known_face_encodings.append(face_encoding)
-            self.known_face_names.append(image)
+            self.append_image(image)
         print(self.known_face_names)
+        self.counter +=1
 
-    def run_recognition(self):
-        img = Image.open('images/maxresdefault.jpg')
+    def run_recognition(self, img_b64):
+        img = converter(img_b64)
         numpydata = np.asarray(img)
 
         small_frame = cv2.resize(numpydata, (0, 0), fx=0.25, fy=0.25)
